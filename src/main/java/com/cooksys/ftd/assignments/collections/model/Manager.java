@@ -2,7 +2,9 @@ package com.cooksys.ftd.assignments.collections.model;
 
 import com.cooksys.ftd.assignments.collections.util.MissingImplementationException;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * TODO: Implement this class
@@ -14,14 +16,18 @@ import java.util.List;
 public class Manager implements Employee {
 
     // TODO: Does this class need private fields? If so, add them here
-
+	
+	private String name;
+	private Manager manager;
+	
     /**
      * TODO: Implement this constructor.
      *
      * @param name the name of the manager to be created
      */
     public Manager(String name) {
-        throw new MissingImplementationException();
+       
+    	this.name = name;
     }
 
     /**
@@ -31,7 +37,11 @@ public class Manager implements Employee {
      * @param manager the direct manager of the manager to be created
      */
     public Manager(String name, Manager manager) {
-        throw new MissingImplementationException();
+    	
+    	
+        this.name = name;
+        this.manager = manager;
+        		
     }
 
     /**
@@ -41,7 +51,9 @@ public class Manager implements Employee {
      */
     @Override
     public String getName() {
-        throw new MissingImplementationException();
+    	
+    	return this.name;
+    	
     }
 
     /**
@@ -50,8 +62,15 @@ public class Manager implements Employee {
      * @return {@code true} if this manager has a manager, or {@code false} otherwise
      */
     @Override
-    public boolean hasManager() {
-        throw new MissingImplementationException();
+    public boolean hasManager() {		
+    	
+    	if(this.getManager() != null) {
+    		return true;
+    	}else {
+        	return false;
+
+    	}
+    	
     }
 
     /**
@@ -61,7 +80,9 @@ public class Manager implements Employee {
      */
     @Override
     public Manager getManager() {
-        throw new MissingImplementationException();
+    	
+    	return this.manager;
+
     }
 
     /**
@@ -78,9 +99,48 @@ public class Manager implements Employee {
      * @return a {@code List<Manager>} that represents the manager's chain of command,
      */
     @Override
-    public List<Manager> getChainOfCommand() {
-        throw new MissingImplementationException();
+    public List<Manager> getChainOfCommand() {	// revisit
+    	
+    	
+    	List<Manager> managerList = new LinkedList<Manager>();
+    	   	
+    	Manager next = this.getManager();  
+    	
+    	/***
+    	 * here data = this.getManager()	// current manager
+    	 * next = this.manager 		// 
+    	 * 
+    	 */
+    	while(next != null) {    		
+    	    				
+    		managerList.add(next);
+    		next = next.getManager();		// here next = this.manager.manager
+    		
+    		//managerList.add(this.getManager());
+    		//this.manager.manager = this.getManager().getManager();
+    	}
+    	
+    	return managerList;
+    	    	
     }
+    
+	@Override
+	public int hashCode() {
+		return Objects.hash(manager, name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Manager)) {
+			return false;
+		}
+		Manager other = (Manager) obj;	// downcasting Object to Manager
+		return Objects.equals(manager, other.manager) && Objects.equals(name, other.name);
+	}
 
     // TODO: Does this class need custom .equals() and .hashcode() methods? If so, implement them here.
 

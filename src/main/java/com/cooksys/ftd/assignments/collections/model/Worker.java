@@ -2,7 +2,9 @@ package com.cooksys.ftd.assignments.collections.model;
 
 import com.cooksys.ftd.assignments.collections.util.MissingImplementationException;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * TODO: Implement this class
@@ -14,14 +16,19 @@ import java.util.List;
 public class Worker implements Employee {
 
     // TODO: Does this class need private fields? If so, add them here
-
+	
+		private String name;
+		private Manager manager;
+		
     /**
      * TODO: Implement this constructor.
      *
      * @param name the name of the worker to be created
      */
     public Worker(String name) {
-        throw new MissingImplementationException();
+    	
+    	this.name = name;
+        
     }
 
     /**
@@ -31,7 +38,11 @@ public class Worker implements Employee {
      * @param manager the direct manager of the worker to be created
      */
     public Worker(String name, Manager manager) {
-        throw new MissingImplementationException();
+    	
+    	this.name = name;
+    	this.manager = manager;
+    	
+        
     }
 
     /**
@@ -41,7 +52,9 @@ public class Worker implements Employee {
      */
     @Override
     public String getName() {
-        throw new MissingImplementationException();
+    	
+    	return this.name;
+        
     }
 
     /**
@@ -51,7 +64,13 @@ public class Worker implements Employee {
      */
     @Override
     public boolean hasManager() {
-        throw new MissingImplementationException();
+    	
+    	if(this.manager != null) {
+    		return true;
+    	}else {
+        	return false;
+
+    	}
     }
 
     /**
@@ -61,8 +80,10 @@ public class Worker implements Employee {
      */
     @Override
     public Manager getManager() {
-        throw new MissingImplementationException();
+    	
+    	return this.manager;
     }
+   
 
     /**
      * TODO: Implement this method.
@@ -78,10 +99,49 @@ public class Worker implements Employee {
      * @return a {@code List<Manager>} that represents the worker's chain of command,
      */
     @Override
-    public List<Manager> getChainOfCommand() {
-        throw new MissingImplementationException();
+    public List<Manager> getChainOfCommand() {	// revisit
+    	
+    	List<Manager> managerList = new LinkedList<Manager>();
+	   	
+    	Manager next = this.getManager();
+     
+    	while(next != null) {    		
+    		
+    		managerList.add(next);
+    		next = next.getManager();		// here next = this.manager.manager
+     		
+    		//managerList.add(this.getManager());
+    		//this.manager.manager = this.getManager().getManager();
+    	}
+    	
+
+    	return managerList;
+    	    	
+    	    	
     }
 
+    @Override
+	public int hashCode() {
+		return Objects.hash(manager, name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Worker)) {
+			
+			return false;
+		}
+		Worker other = (Worker) obj;	// downcasting Object to Worker
+		return Objects.equals(manager, other.manager) && Objects.equals(name, other.name);
+	}
+
+    
+    
+    
     // TODO: Does this class need custom .equals() and .hashcode() methods? If so, implement them here.
 
     // TODO [OPTIONAL]: Consider adding a custom .toString() method here if you want to debug your code with System.out.println() statements
